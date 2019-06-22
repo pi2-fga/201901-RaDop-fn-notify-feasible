@@ -160,6 +160,7 @@ def handle(req):
                          f'function call. Verify if the correct service '
                          f'was called.')
             response = failure_message(error_msg)
+            return response
 
         track_speed = package_payload['max_allowed_speed']
         read_speed = package_payload['vehicle_speed']
