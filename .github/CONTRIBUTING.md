@@ -1,6 +1,6 @@
 # Contribuindo com o projeto
 
-Caso queira contribuir com o projeto, talvez seja uma boa ideia começar pelo [README](https://github.com/radar-pi/) para conhecer um pouco mais sobre nós.
+Caso queira contribuir com o projeto, talvez seja uma boa ideia começar pelo [README](https://github.com/radar-pi/fn-notify-feasible) para conhecer um pouco mais sobre nós.
 Outro documento importante e que deve ser lido é o [Código de Conduta](https://github.com/radar-pi/git-docs/blob/master/docs/CODE_OF_CONDUCT.md).
 
 Obrigado por contribuir! :tada::+1: Sua ajuda será recebida com muita gratidão!
@@ -11,15 +11,15 @@ Obrigado por contribuir! :tada::+1: Sua ajuda será recebida com muita gratidão
 
 * Esse projeto segue um padrão de [_Issues_](https://github.com/radar-pi/git-docs/blob/master/.github/ISSUE_TEMPLATE.md). Logo, caso encontre um _bug_, verifique se ele não se encontra em um a das nossas _Issues_. Os bugs devem ser marcados com _tag (label)_ __bug__.
 
-* Se o _bug_ encontrado não consta nas _Issues_, basta abrir uma [Nova _Issue_](https://github.com/radar-pi/project/issues/new).
+* Se o _bug_ encontrado não consta nas _Issues_, basta abrir uma [Nova _Issue_](https://github.com/radar-pi/fn-notify-feasible/issues/new).
 
 ### Adicionando e/ou modificando alguma funcionalidade
 
-* Primeiro verifique que não existe nenhuma [_Issue_](https://github.com/radar-pi/project/issues) a respeito dessa modificação e/ou adição.
+* Primeiro verifique que não existe nenhuma [_Issue_](https://github.com/radar-pi/fn-notify-feasible/issues) a respeito dessa modificação e/ou adição.
 
-* Caso não exista, crie uma [Nova _Issue_](https://github.com/radar-pi/project/issues/new). Dê um título significativo a ela, coloque uma descrição e pelo menos uma _label_.
+* Caso não exista, crie uma [Nova _Issue_](https://github.com/radar-pi/fn-notify-feasible/issues/new). Dê um título significativo a ela, coloque uma descrição e pelo menos uma _label_.
 
-* As mudanças devem ser submetidas através de [_Pull Requests_](https://github.com/radar-pi/project/compare). Você pode encontrar mais sobre isso no [_Pull Requests Template_](https://github.com/radar-pi/git-docs/blob/master/.github/PULL_REQUEST_TEMPLATE.md).
+* As mudanças devem ser submetidas através de [_Pull Requests_](https://github.com/radar-pi/fn-notify-feasible/compare). Você pode encontrar mais sobre isso no [_Pull Requests Template_](https://github.com/radar-pi/git-docs/blob/master/.github/PULL_REQUEST_TEMPLATE.md).
 
 ## Padrão de _Commit_
 
