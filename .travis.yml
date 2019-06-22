@@ -5,7 +5,7 @@ python:
   - "3.7"
 env:
   global:
-    - CC_TEST_REPORTER_ID=none
+    - CC_TEST_REPORTER_ID=8f63a9288575df7fb543e9bc2d5aa2bb589ea46366fad08e5dbd6accc1a762d2
 services:
   - docker
 before_install:
@@ -23,6 +23,7 @@ script:
 after_script:
   - py.test --cov=fn-notify-feasible --cov-report xml fn-notify-feasible/
   - cp docs/coverage.xml .
+  - ./cc-test-reporter after-build -p $(pwd) --exit-code $TRAVIS_TEST_RESULT -t coverage.py
 deploy:
   provider: script
   script: bash deploy.sh

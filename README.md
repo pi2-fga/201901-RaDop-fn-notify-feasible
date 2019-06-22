@@ -1,20 +1,30 @@
 # FN-Notify-Feasible
 
-A **Função Notify Feasible** é a função responsável por receber as informações .
+[![Build Status](https://travis-ci.org/radar-pi/fn-notify-feasible.svg?branch=develop)](https://travis-ci.org/radar-pi/fn-notify-feasible)
+[![Maintainability](https://api.codeclimate.com/v1/badges/f6660230a65774c69610/maintainability)](https://codeclimate.com/github/radar-pi/fn-notify-feasible/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/f6660230a65774c69610/test_coverage)](https://codeclimate.com/github/radar-pi/fn-notify-feasible/test_coverage)
+
+A **Função Notify Feasible** é a função responsável por receber as informações da infração e notificar a possibilidade de ter se tornado um acidente. O modelo atual é baseado em estudos empíricos acerca da velocidade na probabilidade de acidentes. O modelo deve ser melhorado ao longo da vida do radar com o auxílio de um modelo de _data mining_.
 
 ## Parâmetros
 
-Os parâmetros da função fn-alpr seguem o modelo de dados do pacote (_package_) de mensagens da arquitetura do sistema do radar. Eles consistem em um objeto JSON com o seguinte formato:
+Os parâmetros da função fn-notify-feasible seguem o modelo de dados do pacote (_package_) de mensagens da arquitetura do sistema do radar. Eles consistem em um objeto JSON com o seguinte formato:
 
 - **id**: Um UUID para identificar unicamente aquele pacote (tipo `string`).
 
-- **type**: Qual o tipo da chamada de função, para que a função possa identificar se o pacote que ele recebeu é do seu domínio. Para a função ALPR só serão aceitos pacotes com a chave `alpr-call` (tipo `string`).
+- **type**: Qual o tipo da chamada de função, para que a função possa identificar se o pacote que ele recebeu é do seu domínio. Para a função Notify Feasible só serão aceitos pacotes com a chave `notify-feasible-call` (tipo `string`).
 
 - **payload**: Será um outro objeto JSON com o conteúdo da mensagem (tipo `dict`).
 
-    - **key**: A chave encriptada em base64 para a chamada na API do ALPR (tipo `string`).
+    - **date**: Data da infração no formato RFC 3339 (tipo `string`).
 
-    - **image**: A imagem encriptada em base64 para envio. Esta que será decodificada, pré-processada e enviada para a API do ALPR (tipo `string`).
+    - **id_radar**: Número de identificação do radar que capturou a infração (tipo `integer`).
+
+    - **considered_speed**: Velocidade considerada na leitura da infração (tipo `integer`).
+
+    - **vehicle_speed**: Velocidade medida pelo o equipamento na infração (tipo `string`).
+
+    - **max_allowed_speed**: Velocidade máxima permitida pela via da infração (tipo `string`).
 
 - **time**: O dia e horário em que essa mensagem foi enviado no formato RFC3339, ou seja, `YYYY-MM-DDTHH:MM:SSZ` (tipo `string`).
 
@@ -26,7 +36,6 @@ __Exemplo__:
   "payload": {
     "date":  "2019-06-07T19:24:04.102394Z",
     "id_radar": 2,
-    "infraction": 1,
     "considered_speed": 57,
     "vehicle_speed": 64,
     "max_allowed_speed": 60
@@ -42,7 +51,6 @@ __Exemplo__:
     - _Self-Hosted_ Function as a Service
 - Python 3
 - JSON
-- ALPR
 
 ## Ambiente de Desenvolvimento
 
@@ -84,13 +92,13 @@ source ~/.bashrc
 Agora crie um ambiente virtual com o seguinte comando (colocando o nome que deseja para o ambiente), neste exemplo usarei o nome composta:
 
 ```shell
-mkvirtualenv fn-alpr
+mkvirtualenv fn-notify-feasible
 ```
 
 Para utilizá-lo:
 
 ```shell
-workon fn-alpr
+workon fn-notify-feasible
 pip install -r compiler/requirements.txt # Irá instalar todas as dependências usadas no projeto
 ```
 
@@ -103,8 +111,8 @@ Para outras configurações e documentação adicional acesse a página do [virt
 Para deploy da função, basta seguir o roteiro abaixo:
 
 ```shell
-$ faas build -f fn-alpr.yml
-$ faas deploy -f fn-alpr.yml
+faas build -f fn-notify-feasible.yml
+faas deploy -f fn-notify-feasible.yml
 ```
 
 Para utilizá-lo, teste pela interface web no endereço definido, chamar pela CLI, ou por requisição HTTP:
@@ -112,30 +120,31 @@ Para utilizá-lo, teste pela interface web no endereço definido, chamar pela CL
 FaaS CLI:
 
 ```shell
-$ echo $'{\n  "id": "44b314eb-b67d-4b4f-b744-4772c5954601",\n  "type": "alpr-call",\n  "payload": {\n    "key": "base64-encoded-key",\n    "image": "base64-encoded-image"\n  },\n  "time": "2019-04-27T10:14:35Z"\n}' | faas-cli invoke fn-alpr
+echo $'{\n  "id":  "2387394a-bc7e-4dc9-8295-be8a619e5b5e",\n  "payload": {\n    "date":  "2019-06-07T19:24:04.102394Z",\n    "id_radar": 2,\n    "infraction": 1,\n    "considered_speed": 82,\n    "vehicle_speed": 87,\n    "max_allowed_speed": 60\n  },\n  "time":  "2019-06-07T19:24:04.102394Z",\n  "type":  "radar-infraction"\n}' | faas-cli invoke fn-notify-feasible
+```
 
 HTTP-Request:
 
 ```shell
-$ curl -d $'{\n  "id": "44b314eb-b67d-4b4f-b744-4772c5954601",\n  "type": "alpr-call",\n  "payload": {\n    "key": "base64-encoded-key",\n    "image": "base64-encoded-image"\n  },\n  "time": "2019-04-27T10:14:35Z"\n}' -X POST http://127.0.0.1:8080/function/fn-alpr
+curl -d $'{\n  "id":  "2387394a-bc7e-4dc9-8295-be8a619e5b5e",\n  "payload": {\n    "date":  "2019-06-07T19:24:04.102394Z",\n    "id_radar": 2,\n    "infraction": 1,\n    "considered_speed": 82,\n    "vehicle_speed": 87,\n    "max_allowed_speed": 60\n  },\n  "time":  "2019-06-07T19:24:04.102394Z",\n  "type":  "radar-infraction"\n}' -X POST http://127.0.0.1:8080/function/fn-notify-feasible
 ```
 
 Exemplo de saída:
 
 ```shell
-{"status_code": 200, "response": {"uuid": "85946387-d2f2-468d-96a5-6c71d0fa4a81", "data_type": "alpr_results", "epoch_time": 1557190354549, "processing_time": {"plates": 398.9972229003906, "total": 460.6129999883706}, "img_height": 1080, "img_width": 1440, "results": [{"plate": "AAA1234", "confidence": 93.51219940185547, "region_confidence": 42, "vehicle_region": {"y": 141, "x": 247, "height": 417, "width": 417}, "region": "br-sp", "plate_index": 0, "processing_time_ms": 73.81824493408203, "candidates": [{"matches_template": 1, "plate": "AAA1234", "confidence": 93.51219940185547}, {"matches_template": 0, "plate": "AAA1234", "confidence": 80.09203338623047}, {"matches_template": 0, "plate": "AAA1234", "confidence": 80.0918197631836}, {"matches_template": 1, "plate": "AAA1234", "confidence": 79.95366668701172}, {"matches_template": 1, "plate": "AAA1234", "confidence": 79.9520263671875}, {"matches_template": 0, "plate": "AAA1234", "confidence": 66.6716537475586}, {"matches_template": 0, "plate": "AAA1234", "confidence": 66.53350067138672}, {"matches_template": 0, "plate": "AAA1234", "confidence": 66.53164672851562}, {"matches_template": 1, "plate": "PAE7788", "confidence": 66.39348602294922}], "coordinates": [{"y": 401, "x": 399}, {"y": 400, "x": 511}, {"y": 437, "x": 512}, {"y": 438, "x": 400}], "matches_template": 1, "requested_topn": 10}], "credits_monthly_used": 5, "version": 2, "credits_monthly_total": 2000, "error": false, "regions_of_interest": [{"y": 0, "x": 0, "height": 1080, "width": 1440}]}}
+{'status_code': 200, 'message': 'A probabilidade da infração 2387394a-bc7e-4dc9-8295-be8a619e5b5e (ID) ter se tornado um acidente foi de 69.58%. A notificação 2d8c3d23-efcd-499c-bf1c-11e061767675 foi enviada!'}
 ```
 
 ## Execução do Ambiente de Testes
 
-Para executar os testes do fn-alpr siga o roteiro descrito abaixo:
+Para executar os testes do fn-notify-feasible siga o roteiro descrito abaixo:
 
 Primeiro assegure-se de que tem todas as dependências necessárias para executar o projeto.
 
 ```shell
-$ pip install -r fn-alpr/requirements.txt
+pip install -r fn-notify-feasible/requirements.txt
 # Ou caso não esteja trabalhando com uma virtualenv
-$ python3 -m pip install -r fn-alpr/requirements.txt
+python3 -m pip install -r fn-notify-feasible/requirements.txt
 ```
 
 **OBS**: Caso queria instalar apenas para o usuário e não no sistema use a opt `--user` ao final do comando pip.
@@ -143,10 +152,10 @@ $ python3 -m pip install -r fn-alpr/requirements.txt
 Agora que todas as dependências estão instaladas basta rodar o comando do pytest para verificar se o código está de acordo com o teste.
 
 ```shell
-$ pytest fn-alpr/ # Executa os testes no pytest
-$ py.test --cov=fn-alpr fn-alpr/ # Executa os testes e avalia a cobertura estática de código
-$ py.test --cov=fn-alpr --cov-report html fn-alpr/ # Faz o mesmo papel que o comando anterior, além de gerar uma pasta htmlcov/ com uma página relatório da cobertura
-$ flake8 fn-alpr/* # Executa o PEP8 linter nos arquivos python
+pytest fn-notify-feasible/ # Executa os testes no pytest
+py.test --cov=fn-notify-feasible fn-notify-feasible/ # Executa os testes e avalia a cobertura estática de código
+py.test --cov=fn-notify-feasible --cov-report html fn-notify-feasible/ # Faz o mesmo papel que o comando anterior, além de gerar uma pasta htmlcov/ com uma página relatório da cobertura
+flake8 fn-notify-feasible/* # Executa o PEP8 linter nos arquivos python
 ```
 
 Durante o `pytest` e o `py.test`, o terminal lhe apresentará um _output_ com o relatório dos testes e a cobertura de testes da aplicação. Para outras configuraões e documentação complementar acesse o sítio virtual do provedor do [pytest](https://docs.pytest.org/en/latest/) e do [coverage](https://pytest-cov.readthedocs.io/en/latest/).
