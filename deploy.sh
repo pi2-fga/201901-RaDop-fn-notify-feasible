@@ -6,6 +6,6 @@
 
 curl -sSL https://cli.openfaas.com | sudo sh
 
-faas-cli -f fn-alpr.yml build
+faas-cli -f fn-notify-feasible.yml build
 
-faas-cli -f fn-alpr.yml push
+faas-cli -f fn-notify-feasible.yml push
