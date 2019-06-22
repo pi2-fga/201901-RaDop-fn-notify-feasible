@@ -1,0 +1,6 @@
+[run]
+omit = fn-notify-feasible/__init__.py
+       fn-notify-feasible/**/__init__.py
+
+[xml]
+output = docs/coverage.xml

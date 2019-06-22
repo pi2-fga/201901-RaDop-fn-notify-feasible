@@ -1,0 +1,8 @@
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  fn-notify-feasible:
+    lang: python3
+    handler: ./fn-notify-feasible
+    image: radop/fn-notify-feasible:latest

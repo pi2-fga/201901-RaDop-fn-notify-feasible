@@ -1,0 +1,31 @@
+dist: xenial
+sudo: required
+language: python
+python:
+  - "3.7"
+env:
+  global:
+    - CC_TEST_REPORTER_ID=none
+services:
+  - docker
+before_install:
+  - pip install -U pip
+  - pip install -r fn-notify-feasible/requirements.txt
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+script:
+  - flake8 fn-notify-feasible/
+  - pytest
+  - coverage run -m pytest
+  - echo $DOCKERHUB_PASS | docker login --username $DOCKERHUB_USER --password-stdin
+after_script:
+  - py.test --cov=fn-notify-feasible --cov-report xml fn-notify-feasible/
+  - cp docs/coverage.xml .
+deploy:
+  provider: script
+  script: bash deploy.sh
+  skip_cleanup: true
+  on:
+    branch: develop

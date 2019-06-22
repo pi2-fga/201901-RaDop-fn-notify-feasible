@@ -1,0 +1,7 @@
+# Open FaaS usage and build folders
+template
+build
+
+# Pycache files
+fn-notify-feasible/__pycache__/
+fn-notify-feasible/**/__pycache__/
