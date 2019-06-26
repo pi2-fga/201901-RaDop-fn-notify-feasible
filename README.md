@@ -41,7 +41,7 @@ __Exemplo__:
     "max_allowed_speed": 60
   },
   "time":  "2019-06-07T19:24:04.102394Z",
-  "type":  "radar-infraction"
+  "type":  "notify-feasible-call"
 }
 ```
 

@@ -179,9 +179,9 @@ def handle(req):
         notification = json.loads(notification)
         notification_id = notification['response_message']['generated_keys'][0]
         response = success_message(
-            f'A probabilidade da infração {infraction_id} (ID) ter se tornado um'
-            f' acidente foi de {str(round(feasability, 2))}%. A notificação '
-            f'{notification_id} foi enviada!'
+            f'A probabilidade da infração {infraction_id} (ID) ter se tornado'
+            f' um acidente foi de {str(round(feasability, 2))}%. A notificação'
+            f' {notification_id} foi enviada!'
         )
 
     except (TimeoutError, ConnectionRefusedError) as err:
