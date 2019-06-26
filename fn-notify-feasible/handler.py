@@ -153,7 +153,6 @@ def handle(req):
         package = json.loads(req)
         package_type = package['type']
         package_payload = package['payload']
-        package_id = package['id']
 
         if package_type != FN_CALL:
             error_msg = (f'Error!! The message header indicates other '
@@ -165,11 +164,12 @@ def handle(req):
         track_speed = package_payload['max_allowed_speed']
         read_speed = package_payload['vehicle_speed']
         used_speed = package_payload['considered_speed']
+        infraction_id = package_payload['infraction_id']
 
         feasability = define_feasability(track_speed, read_speed, used_speed)
 
         data = {
-            'infraction_id': package_id,
+            'infraction_id': infraction_id,
             'crash_feasability': feasability
         }
 

@@ -16,7 +16,7 @@ Os parâmetros da função fn-notify-feasible seguem o modelo de dados do pacote
 
 - **payload**: Será um outro objeto JSON com o conteúdo da mensagem (tipo `dict`).
 
-    - **date**: Data da infração no formato RFC 3339 (tipo `string`).
+    - **infraction_id**: ID da infração a qual se refere a notificação no fomarto UUID v4 (tipo `string`).
 
     - **id_radar**: Número de identificação do radar que capturou a infração (tipo `integer`).
 
@@ -34,7 +34,7 @@ __Exemplo__:
 {
   "id":  "2387394a-bc7e-4dc9-8295-be8a619e5b5e",
   "payload": {
-    "date":  "2019-06-07T19:24:04.102394Z",
+    "infraction_id":  "a268e79c-00d8-405d-a3eb-48adc9689443",
     "id_radar": 2,
     "considered_speed": 57,
     "vehicle_speed": 64,
@@ -120,13 +120,13 @@ Para utilizá-lo, teste pela interface web no endereço definido, chamar pela CL
 FaaS CLI:
 
 ```shell
-echo $'{\n  "id":  "2387394a-bc7e-4dc9-8295-be8a619e5b5e",\n  "payload": {\n    "date":  "2019-06-07T19:24:04.102394Z",\n    "id_radar": 2,\n    "infraction": 1,\n    "considered_speed": 82,\n    "vehicle_speed": 87,\n    "max_allowed_speed": 60\n  },\n  "time":  "2019-06-07T19:24:04.102394Z",\n  "type":  "radar-infraction"\n}' | faas-cli invoke fn-notify-feasible
+echo $'{\n  "id":  "2387394a-bc7e-4dc9-8295-be8a619e5b5e",\n  "payload": {\n    "infraction_id":  "a268e79c-00d8-405d-a3eb-48adc9689443",\n    "id_radar": 2,\n    "infraction": 1,\n    "considered_speed": 82,\n    "vehicle_speed": 87,\n    "max_allowed_speed": 60\n  },\n  "time":  "2019-06-07T19:24:04.102394Z",\n  "type":  "radar-infraction"\n}' | faas-cli invoke fn-notify-feasible
 ```
 
 HTTP-Request:
 
 ```shell
-curl -d $'{\n  "id":  "2387394a-bc7e-4dc9-8295-be8a619e5b5e",\n  "payload": {\n    "date":  "2019-06-07T19:24:04.102394Z",\n    "id_radar": 2,\n    "infraction": 1,\n    "considered_speed": 82,\n    "vehicle_speed": 87,\n    "max_allowed_speed": 60\n  },\n  "time":  "2019-06-07T19:24:04.102394Z",\n  "type":  "radar-infraction"\n}' -X POST http://127.0.0.1:8080/function/fn-notify-feasible
+curl -d $'{\n  "id":  "2387394a-bc7e-4dc9-8295-be8a619e5b5e",\n  "payload": {\n    "infraction_id":  "a268e79c-00d8-405d-a3eb-48adc9689443",\n    "id_radar": 2,\n    "infraction": 1,\n    "considered_speed": 82,\n    "vehicle_speed": 87,\n    "max_allowed_speed": 60\n  },\n  "time":  "2019-06-07T19:24:04.102394Z",\n  "type":  "radar-infraction"\n}' -X POST http://127.0.0.1:8080/function/fn-notify-feasible
 ```
 
 Exemplo de saída:
